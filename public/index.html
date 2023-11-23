@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>Bucket Suggestions</title>
+</head>
+<body>
+  <h1 class="main-heading">Bucket Suggestions</h1>
+  <h2 class="inputs-heading">INPUTS</h2>
+
+  <form class="form" id="inputForm">
+    <div class="form-inputs">
+        <div>
+            <label class="label" for="bucketVolumes">1: Enter the volumes of the buckets:</label>
+        <br>
+        <div><span>A: </span><input type="number" id="bucketA"><span> cubic inches</span></div>
+        <div><span>B: </span><input type="number" id="bucketB"><span> cubic inches</span></div>
+        <div><span>C: </span><input type="number" id="bucketC"><span> cubic inches</span></div>
+        <div><span>D: </span><input type="number" id="bucketD"><span> cubic inches</span></div>
+        <div><span>E: </span><input type="number" id="bucketE"><span> cubic inches</span></div>
+        <br><br>
+        </div>
+        
+        <div>
+            <label class="label" for="ballVolumes">2: Enter the volumes of the balls:</label>
+        <br>
+        <div><span>A: Pink:   </span><input type="number" id="pinkVolume"><span> cubic inches</span></div>
+        <div><span>B: Red:    </span><input type="number" id="redVolume"><span> cubic inches</span></div>
+        <div><span>C: Blue:   </span><input type="number" id="blueVolume"><span> cubic inches</span></div>
+        <div><span>D: Orange: </span><input type="number" id="orangeVolume"><span> cubic inches</span></div>
+        <div><span>E: Green:  </span><input type="number" id="greenVolume"><span> cubic inches</span></div>
+        <br><br>
+        </div>
+        
+        <div>
+            <label class="label" for="ballCounts">3: Input the number of each colored ball <br>to be placed inside the buckets:</label>
+        <br>
+        <div><span>A: Pink:  </span><input type="number" id="pinkCount"><span> Ball</span></div>
+        <div><span>B: Red:  </span><input type="number" id="redCount"><span> Ball</span></div>
+        <div><span>C: Blue:  </span><input type="number" id="blueCount"><span> Ball</span></div>
+        <div><span>D: Orange:  </span><input type="number" id="orangeCount"><span> Ball</span></div>
+        <div><span>E: Green:  </span><input type="number" id="greenCount"><span> Ball</span></div>
+        <br><br>
+        </div>
+    </div>
+    <button class="button" type="button" onclick="initializeSystem()">Initialize System</button>
+  </form>
+
+  <h2 class="inputs-heading">Suggestions</h2>
+  <div class="suggestions">
+    <ul id="suggestions"></ul>
+  </div>
+  
+
+  <script>
+    async function fetchSuggestions() {
+      const response = await fetch('/suggestions');
+      const suggestions = await response.json();
+
+      const suggestionsList = document.getElementById('suggestions');
+      suggestionsList.innerHTML = '';
+
+      for (const bucket in suggestions) {
+        const suggestionItem = document.createElement('li');
+        suggestionItem.textContent = `${bucket}: ${suggestions[bucket]}`;
+        suggestionsList.appendChild(suggestionItem);
+      }
+    }
+
+    async function initializeSystem() {
+      const bucketA = document.getElementById('bucketA').value;
+      const bucketB = document.getElementById('bucketB').value;
+      const bucketC = document.getElementById('bucketC').value;
+      const bucketD = document.getElementById('bucketD').value;
+      const bucketE = document.getElementById('bucketE').value;
+
+      const pinkVolume = document.getElementById('pinkVolume').value;
+      const redVolume = document.getElementById('redVolume').value;
+      const blueVolume = document.getElementById('blueVolume').value;
+      const orangeVolume = document.getElementById('orangeVolume').value;
+      const greenVolume = document.getElementById('greenVolume').value;
+
+      const pinkCount = document.getElementById('pinkCount').value;
+      const redCount = document.getElementById('redCount').value;
+      const blueCount = document.getElementById('blueCount').value;
+      const orangeCount = document.getElementById('orangeCount').value;
+      const greenCount = document.getElementById('greenCount').value;
+
+      await fetch('/initialize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          buckets: { A: bucketA, B: bucketB, C: bucketC, D: bucketD, E: bucketE },
+          ballVolumes: { PINK: pinkVolume, RED: redVolume, BLUE: blueVolume, ORANGE: orangeVolume, GREEN: greenVolume },
+          ballCounts: { PINK: pinkCount, RED: redCount, BLUE: blueCount, ORANGE: orangeCount, GREEN: greenCount }
+        }),
+      });
+
+      fetchSuggestions();
+    }
+
+    // Call fetchSuggestions() when the page loads
+    document.addEventListener('DOMContentLoaded', fetchSuggestions);
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+input{
+    width: 50px;
+}
+
+.label{
+    margin-bottom: 20px;
+}
+.main-heading{
+    text-align: center;
+}
+
+.inputs-heading{
+    text-align: center;
+    background-color: black;
+    color: white;
+}
+
+.form-inputs{
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+}
+.button{
+    display: center;
+    justify-content: center;
+    right: 50%;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.suggestions{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
